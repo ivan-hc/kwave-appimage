@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@v6
 
     - name: build
       if: always()
@@ -20,13 +20,13 @@ jobs:
         sudo apt update && sudo apt install desktop-file-utils
         sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
         sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-        chmod a+x ./*-junest.sh
-        ./*-junest.sh
+        chmod a+x ./*-anylinux.sh
+        ./*-anylinux.sh
         mkdir dist
         mv *AppImage* dist/
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v7.0.2
+      uses: actions/upload-artifact@v4.4.0
       with:
         name: AppImage
         path: 'dist'
@@ -37,7 +37,7 @@ jobs:
       runs-on: ubuntu-latest
 
       steps:
-        - uses: actions/download-artifact@v8.0.2
+        - uses: actions/download-artifact@v4.1.8
           with:
             name: AppImage
 
@@ -48,7 +48,7 @@ jobs:
             echo SNAPSHOT_TAG="${SNAPSHOT_TAG}" >> "${GITHUB_ENV}"
           continue-on-error: false
         - name: create snapshot
-          uses: softprops/action-gh-release@v3
+          uses: softprops/action-gh-release@v2
           with:
             name: "Snapshot ${{ env.SNAPSHOT_TAG}}"
             tag_name: "${{ env.SNAPSHOT_TAG}}"
